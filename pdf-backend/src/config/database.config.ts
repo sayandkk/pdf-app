@@ -17,7 +17,8 @@ export const databaseConfig = TypeOrmModule.forRoot({
   entities: [Signature, Document, Signer, User, DocumentActivity, UserActivity, SystemMetrics],
   synchronize: process.env.NODE_ENV !== 'production',
   logging: process.env.NODE_ENV !== 'production',
+  ssl: process.env.NODE_ENV === 'production',
   extra: {
-    family: 4, // Force IPv4 — required for Render free tier
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
   },
 });
