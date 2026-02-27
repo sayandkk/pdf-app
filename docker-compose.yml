@@ -1,0 +1,66 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: pdf-nexus-postgres
+    environment:
+      POSTGRES_DB: pdf_nexus
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 9633195241
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pdf-nexus-network
+
+  # Backend API (NestJS)
+  backend:
+    build:
+      context: ./pdf-backend
+      dockerfile: Dockerfile
+    container_name: pdf-nexus-backend
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 9633195241
+      DB_NAME: pdf_nexus
+      PORT: 3000
+      JWT_SECRET: your-super-secret-jwt-key-change-this-in-production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./pdf-backend/uploads:/app/uploads
+      - ./pdf-backend/tools:/app/tools
+    networks:
+      - pdf-nexus-network
+    command: npm run start:dev
+
+  # Frontend (React + Vite)
+  frontend:
+    build:
+      context: ./pdf-frontend
+      dockerfile: Dockerfile
+    container_name: pdf-nexus-frontend
+    environment:
+      VITE_API_BASE_URL: http://backend:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    volumes:
+      - ./pdf-frontend/src:/app/src
+      - ./pdf-frontend/public:/app/public
+    networks:
+      - pdf-nexus-network
+    command: npm run dev -- --host 0.0.0.0
+
+volumes:
+  postgres_data:
+
+networks:
+  pdf-nexus-network:
+    driver: bridge
