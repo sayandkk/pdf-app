@@ -15,7 +15,7 @@ export const databaseConfig = TypeOrmModule.forRoot({
   password: process.env.DB_PASSWORD || '9633195241',
   database: process.env.DB_NAME || 'pdf_nexus',
   entities: [Signature, Document, Signer, User, DocumentActivity, UserActivity, SystemMetrics],
-  synchronize: process.env.NODE_ENV !== 'production',
+  synchronize: process.env.DB_SYNC === 'true' || process.env.NODE_ENV !== 'production',
   logging: process.env.NODE_ENV !== 'production',
   ssl: process.env.NODE_ENV === 'production',
   extra: {
