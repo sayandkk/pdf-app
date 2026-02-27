@@ -25,6 +25,13 @@ export class PdfToWordService {
   // ────────────────────────────────────────────────────────────────────────
   private async convertViaPython(file: Express.Multer.File): Promise<Buffer | null> {
     try {
+      // Wake up the Python service first (free tier sleeps after inactivity)
+      try {
+        await firstValueFrom(
+          this.httpService.get(`${PYTHON_SERVICE_URL}/health`, { timeout: 60_000 }),
+        );
+      } catch (_) { /* ignore wake-up errors */ }
+
       const form = new FormData();
       form.append('file', file.buffer, {
         filename: file.originalname,
@@ -37,7 +44,7 @@ export class PdfToWordService {
         this.httpService.post(`${PYTHON_SERVICE_URL}/convert-pdf`, form, {
           headers: form.getHeaders(),
           responseType: 'arraybuffer',
-          timeout: 120_000,
+          timeout: 180_000,
         }),
       );
 
