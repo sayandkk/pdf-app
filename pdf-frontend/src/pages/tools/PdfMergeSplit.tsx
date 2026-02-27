@@ -41,7 +41,7 @@ export const PdfMergeSplit = () => {
         formData.append('files', file);
       });
 
-      const response = await fetch('http://localhost:3000/pdf-merge-split/merge', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/pdf-merge-split/merge`, {
         method: 'POST',
         body: formData,
       });
@@ -93,7 +93,7 @@ export const PdfMergeSplit = () => {
       formData.append('file', splitFile);
       formData.append('ranges', splitPages);
 
-      const response = await fetch('http://localhost:3000/pdf-merge-split/split', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/pdf-merge-split/split`, {
         method: 'POST',
         body: formData,
       });

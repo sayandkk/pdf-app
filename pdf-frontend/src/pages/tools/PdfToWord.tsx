@@ -130,7 +130,7 @@ export const PdfToWord = () => {
         });
       }, 300);
 
-      const response = await fetch('http://localhost:3000/pdf-to-word/convert', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/pdf-to-word/convert`, {
         method: 'POST',
         body: formData,
       });

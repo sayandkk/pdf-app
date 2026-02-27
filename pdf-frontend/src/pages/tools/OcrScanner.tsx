@@ -50,7 +50,7 @@ export const OcrScanner = () => {
       // Update progress
       setProgress(25);
 
-      const response = await fetch('http://localhost:3000/ocr/scan', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/ocr/scan`, {
         method: 'POST',
         body: formData,
       });
