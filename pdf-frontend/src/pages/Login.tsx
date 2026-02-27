@@ -124,11 +124,7 @@ const Login = () => {
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
-            <p>Demo credentials:</p>
-            <p className="font-mono text-xs bg-gray-100 p-2 rounded mt-1">
-              Email: admin@example.com<br />
-              Password: admin123
-            </p>
+            
           </div>
         </CardContent>
       </Card>
